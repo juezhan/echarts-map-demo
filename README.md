@@ -1,4 +1,4 @@
-# echarmap-demo
+# echarts-map-demo
 
 > A Vue.js project
 
