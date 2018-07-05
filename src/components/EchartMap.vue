@@ -59,95 +59,8 @@
       }
     },
     created() {
-      // 迁徙轨迹
-      this.orbitConfig = _.merge({
-        type: 'lines',
-        zLevel: 2,
-        effect: {
-          show: true,
-          period: 5,
-          trailLength: 0,
-          symbol: this.orbitPath,
-          symbolSize: [15, 25],
-          color: '#003dba'
-        },
-        lineStyle: {
-          normal: {
-            width: 4,
-            opacity: 1,
-            curveness: 0,
-            color: '#37cb00'
-          }
-        }
-      }, this.orbit)
-      // 目的地
-      this.destinationConfig = _.merge({
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        zLevel: 2,
-        rippleEffect: {
-          period: 4,
-          brushType: 'stroke',
-          scale: 4
-        },
-        label: {
-          normal: {
-            show: true,
-            position: 'right',
-            offset: [-24, -18],
-            formatter: '{b}',
-            fontWeight: 'lighter',
-            fontSize: 12,
-            color: '#000000'
-          },
-          emphasis: {
-            show: false
-          }
-        },
-        symbol: this.destinationPath,
-        symbolSize: 20,
-        itemStyle: {
-          normal: {
-            show: false,
-            color: '#9200a8'
-          }
-        }
-      }, this.destination)
-      // 出发地
-      this.originConfig = _.merge({
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        zLevel: 2,
-        rippleEffect: {
-          period: 4,
-          brushType: 'stroke',
-          scale: 4
-        },
-        label: {
-          normal: {
-            show: true,
-            formatter: '{b}',
-            color: '#FFFF33'
-          }
-        },
-        symbol: this.originPath,
-        symbolSize: 20,
-        symbolKeepAspect: true,
-        itemStyle: {
-          color: '#ff0000'
-        }
-      }, this.origin)
     },
     mounted() {
-      let originNames = []
-      this.originData = []
-      this.coords.map(item => {
-        originNames.push(item.fromCoord)
-      })
-      originNames = _.uniq(originNames)
-      originNames.forEach(item => {
-        this.originData.push(geoCoordMap[item])
-      })
       this.initChart()
     },
     updated() {
@@ -163,10 +76,100 @@
       this.chart = null
     },
     methods: {
-      initChart() {
-        this.chart = window.echarts.init(this.$refs.myMap)
+      initData() {
+        // 迁徙轨迹
+        this.orbitConfig = _.merge({
+          type: 'lines',
+          zLevel: 2,
+          effect: {
+            show: true,
+            period: 5,
+            trailLength: 0,
+            symbol: this.orbitPath,
+            symbolSize: [15, 25],
+            color: '#003dba'
+          },
+          lineStyle: {
+            normal: {
+              width: 4,
+              opacity: 1,
+              curveness: 0,
+              color: '#37cb00'
+            }
+          }
+        }, this.orbit)
+        // 目的地
+        this.destinationConfig = _.merge({
+          type: 'scatter',
+          coordinateSystem: 'geo',
+          zLevel: 2,
+          rippleEffect: {
+            period: 4,
+            brushType: 'stroke',
+            scale: 4
+          },
+          label: {
+            normal: {
+              show: true,
+              position: 'right',
+              offset: [-24, -18],
+              formatter: '{b}',
+              fontWeight: 'lighter',
+              fontSize: 12,
+              color: '#000000'
+            },
+            emphasis: {
+              show: false
+            }
+          },
+          symbol: this.destinationPath,
+          symbolSize: 20,
+          itemStyle: {
+            normal: {
+              show: false,
+              color: '#9200a8'
+            }
+          }
+        }, this.destination)
+        // 出发地
+        this.originConfig = _.merge({
+          type: 'scatter',
+          coordinateSystem: 'geo',
+          zLevel: 2,
+          rippleEffect: {
+            period: 4,
+            brushType: 'stroke',
+            scale: 4
+          },
+          label: {
+            normal: {
+              show: true,
+              formatter: '{b}',
+              color: '#FFFF33'
+            }
+          },
+          symbol: this.originPath,
+          symbolSize: 20,
+          symbolKeepAspect: true,
+          itemStyle: {
+            color: '#ff0000'
+          }
+        }, this.origin)
+        let originNames = []
+        this.originData = []
+        this.coords.map(item => {
+          originNames.push(item.fromCoord)
+        })
+        originNames = _.uniq(originNames)
+        originNames.forEach(item => {
+          this.originData.push(geoCoordMap[item])
+        })
         this.getSeries()
         this.chart.setOption(this.opt)
+      },
+      initChart() {
+        this.chart = window.echarts.init(this.$refs.myMap)
+        this.initData()
       },
       convertData(data) {
         let res = []
@@ -256,6 +259,11 @@
           series: this.series
         }
         return obj
+      }
+    },
+    watch: {
+      coords() {
+        this.initData()
       }
     }
   }

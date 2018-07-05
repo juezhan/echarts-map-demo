@@ -1,6 +1,15 @@
 <template>
   <div class="hello">
-    <echart-map v-bind:coords="coords" v-bind:orbit="orbit"></echart-map>
+    <div>
+      <div>
+        <ul>
+          <li v-for="item in menuList" v-bind:key="item.name" v-on:click="setMenu(item)">{{item.name}}</li>
+        </ul>
+      </div>
+      <div>
+        <echart-map ref="map" v-bind:coords="coords" v-bind:orbit="orbit"></echart-map>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,25 +21,48 @@
     data() {
       return {
         msg: 'Welcome to Your Vue.js App',
-        coords: [
-          {fromCoord: '上海', toCoord: '呼和浩特'},
-          {fromCoord: '呼和浩特', toCoord: '沈阳'},
-          {fromCoord: '沈阳', toCoord: '长春'},
-          {fromCoord: '广州', toCoord: '北京'},
-          {fromCoord: '武汉', toCoord: '南京'},
-          {fromCoord: '昆明', toCoord: '西安'}
-        ],
+        coords: [],
         orbit: {
           a: 11,
           c: 3,
           aa: {
             dd: 'aaa'
           }
-        }
+        },
+        menuList: [
+          {
+            name: 'Menu A',
+            coords: [
+              {fromCoord: '长沙', toCoord: '呼和浩特'},
+              {fromCoord: '长沙', toCoord: '沈阳'},
+              {fromCoord: '长沙', toCoord: '长春'},
+              {fromCoord: '长沙', toCoord: '北京'},
+              {fromCoord: '长沙', toCoord: '南京'},
+              {fromCoord: '长沙', toCoord: '西安'}
+            ]
+          },
+          {
+            name: 'Menu B',
+            coords: [
+              {fromCoord: '乌鲁木齐', toCoord: '重庆'},
+              {fromCoord: '乌鲁木齐', toCoord: '兰州'},
+              {fromCoord: '乌鲁木齐', toCoord: '拉萨'},
+              {fromCoord: '乌鲁木齐', toCoord: '哈尔滨'},
+              {fromCoord: '乌鲁木齐', toCoord: '济南'},
+              {fromCoord: '乌鲁木齐', toCoord: '福州'}
+            ]
+          }
+        ]
       }
     },
     components: {
       EchartMap
+    },
+    methods: {
+      setMenu(item) {
+        // console.log(item)
+        this.coords = item.coords
+      }
     }
   }
 </script>
